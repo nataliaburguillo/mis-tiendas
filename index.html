@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0b0f1a" />
+    <title>Mis Tiendas ✨</title>
+
+    <style>
+      :root {
+        --bg0: #070a12;
+        --bg1: #0b0f1a;
+        --card: rgba(255, 255, 255, 0.06);
+        --card2: rgba(255, 255, 255, 0.09);
+        --stroke: rgba(255, 255, 255, 0.1);
+        --stroke2: rgba(255, 255, 255, 0.16);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.65);
+        --muted2: rgba(255, 255, 255, 0.45);
+        --shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+        --shadow2: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+        --accent: #8b5cf6;
+        --accent2: #22d3ee;
+        --ok: #34d399;
+        --warn: #fbbf24;
+        --danger: #fb7185;
+
+        --radius: 22px;
+        --radius2: 16px;
+        --gap: 14px;
+        --maxw: 1180px;
+
+        --safe-top: env(safe-area-inset-top);
+        --safe-bot: env(safe-area-inset-bottom);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        color: var(--text);
+        background: radial-gradient(
+            1200px 600px at 10% -10%,
+            rgba(139, 92, 246, 0.32),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 500px at 90% 0%,
+            rgba(34, 211, 238, 0.24),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 700px at 70% 120%,
+            rgba(52, 211, 153, 0.12),
+            transparent 55%
+          ),
+          linear-gradient(180deg, var(--bg0), var(--bg1));
+        overflow-x: hidden;
+      }
+
+      /* Subtle animated grain + aurora */
+      .fx {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .fx::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(139, 92, 246, 0.18),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 70% 35%,
+            rgba(34, 211, 238, 0.14),
+            transparent 52%
+          ),
+          radial-gradient(
+            circle at 45% 75%,
+            rgba(251, 113, 133, 0.09),
+            transparent 58%
+          );
+        filter: blur(28px);
+        animation: drift 14s ease-in-out infinite alternate;
+        opacity: 0.9;
+      }
+      .fx::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+        opacity: 0.08;
+      }
+      @keyframes drift {
+        from {
+          transform: translate3d(-2%, -2%, 0) scale(1.02);
+        }
+        to {
+          transform: translate3d(2%, 2%, 0) scale(1.05);
+        }
+      }
+
+      .app {
+        position: relative;
+        z-index: 1;
+        min-height: 100%;
+        padding: calc(20px + var(--safe-top)) 16px calc(86px + var(--safe-bot))
+          16px;
+        display: flex;
+        justify-content: center;
+      }
+      .wrap {
+        width: 100%;
+        max-width: var(--maxw);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      /* Top bar */
+      .top {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 14px;
+        border-radius: var(--radius);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.08),
+          rgba(255, 255, 255, 0.04)
+        );
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow2);
+        backdrop-filter: blur(10px);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: radial-gradient(
+            circle at 30% 25%,
+            rgba(255, 255, 255, 0.35),
+            transparent 45%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(139, 92, 246, 0.95),
+            rgba(34, 211, 238, 0.78)
+          );
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.22);
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        flex: 0 0 auto;
+      }
+      .logo svg {
+        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+      }
+      .title {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .title h1 {
+        margin: 0;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .title p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .topActions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--stroke);
+        color: var(--text);
+        text-decoration: none;
+        font-size: 12px;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.15s ease, background 0.15s ease,
+          border-color 0.15s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+      }
+      .pill:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.09);
+        border-color: var(--stroke2);
+      }
+      .pill:active {
+        transform: translateY(0);
+      }
+      .pill svg {
+        opacity: 0.9;
+      }
+
+      /* Hero */
+      .hero {
+        border-radius: var(--radius);
+        border: 1px solid var(--stroke);
+        background: radial-gradient(
+            900px 300px at 15% 15%,
+            rgba(139, 92, 246, 0.22),
+            transparent 60%
+          ),
+          radial-gradient(
+            700px 260px at 85% 30%,
+            rgba(34, 211, 238, 0.18),
+            transparent 60%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.07),
+            rgba(255, 255, 255, 0.03)
+          );
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(10px);
+        padding: 18px;
+        overflow: hidden;
+        position: relative;
+      }
+      .heroGrid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 14px;
+        align-items: stretch;
+      }
+      .heroLeft {
+        min-width: 0;
+      }
+      .hero h2 {
+        margin: 0 0 8px 0;
+        font-size: 22px;
+        letter-spacing: 0.2px;
+      }
+      .hero p {
+        margin: 0 0 14px 0;
+        color: var(--muted);
+        line-height: 1.35;
+        font-size: 13px;
+      }
+
+      .quickRow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .statBox {
+        border-radius: 18px;
+        border: 1px solid var(--stroke);
+        background: rgba(0, 0, 0, 0.18);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+      }
+      .statBox::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: radial-gradient(
+            circle at 30% 20%,
+            rgba(52, 211, 153, 0.18),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 80% 40%,
+            rgba(251, 191, 36, 0.12),
+            transparent 45%
+          );
+        filter: blur(24px);
+        opacity: 0.8;
+      }
+      .statBox > * {
+        position: relative;
+        z-index: 1;
+      }
+      .statTop {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .statTop .badge {
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.85);
+        white-space: nowrap;
+      }
+      .statNum {
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        line-height: 1;
+      }
+      .statHint {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.25;
+      }
+
+      /* Filters */
+      .filters {
+        border-radius: var(--radius);
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: var(--shadow2);
+        backdrop-filter: blur(10px);
+        padding: 14px;
+        display: grid;
+        grid-template-columns: 1.4fr 0.9fr 0.9fr 0.9fr;
+        gap: 12px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+      .label {
+        font-size: 11px;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: 0.2px;
+      }
+      .control {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: rgba(0, 0, 0, 0.18);
+        color: var(--text);
+        padding: 11px 12px;
+        outline: none;
+        transition: border-color 0.15s ease, transform 0.15s ease,
+          background 0.15s ease;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+        font-size: 13px;
+      }
+      .control:focus {
+        border-color: rgba(34, 211, 238, 0.55);
+        background: rgba(0, 0, 0, 0.24);
+        transform: translateY(-1px);
+      }
+      select.control {
+        appearance: none;
+        background-image: linear-gradient(
+            45deg,
+            transparent 50%,
+            rgba(255, 255, 255, 0.65) 50%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.65) 50%,
+            transparent 50%
+          );
+        background-position: calc(100% - 18px) calc(50% + 1px),
+          calc(100% - 12px) calc(50% + 1px);
+        background-size: 6px 6px, 6px 6px;
+        background-repeat: no-repeat;
+        padding-right: 34px;
+      }
+
+      /* Chips */
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 2px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 12px;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.15s ease, background 0.15s ease,
+          border-color 0.15s ease;
+        white-space: nowrap;
+      }
+      .chip:hover {
+        transform: translateY(-1px);
+        border-color: var(--stroke2);
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .chip[data-active="true"] {
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.35),
+          rgba(34, 211, 238, 0.22)
+        );
+        border-color: rgba(34, 211, 238, 0.45);
+        color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 12px 28px rgba(34, 211, 238, 0.08);
+      }
+
+      /* Grid */
+      .sectionHead {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        padding: 4px 2px 0 2px;
+      }
+      .sectionHead h3 {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: 0.15px;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .sectionHead .meta {
+        color: var(--muted);
+        font-size: 12px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+        display: inline-block;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+
+      .card {
+        border-radius: var(--radius);
+        border: 1px solid var(--stroke);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.07),
+          rgba(255, 255, 255, 0.03)
+        );
+        box-shadow: var(--shadow2);
+        overflow: hidden;
+        position: relative;
+        min-height: 132px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.16s ease, border-color 0.16s ease,
+          background 0.16s ease;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.18);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.09),
+          rgba(255, 255, 255, 0.035)
+        );
+      }
+
+      .cardTop {
+        padding: 14px 14px 0 14px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .cardName {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+      .cardName strong {
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .tag {
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.78);
+        white-space: nowrap;
+      }
+      .tag.price-budget {
+        border-color: rgba(34, 211, 153, 0.25);
+      }
+      .tag.price-mid {
+        border-color: rgba(251, 191, 36, 0.25);
+      }
+      .tag.price-premium {
+        border-color: rgba(251, 113, 133, 0.22);
+      }
+
+      .star {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(0, 0, 0, 0.18);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.15s ease, background 0.15s ease,
+          border-color 0.15s ease;
+        flex: 0 0 auto;
+      }
+      .star:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 255, 255, 0.22);
+        background: rgba(0, 0, 0, 0.24);
+      }
+      .star[data-on="true"] {
+        border-color: rgba(251, 191, 36, 0.55);
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(251, 191, 36, 0.24),
+          rgba(0, 0, 0, 0.18)
+        );
+        box-shadow: 0 14px 30px rgba(251, 191, 36, 0.08);
+      }
+      .star svg {
+        opacity: 0.9;
+      }
+
+      .cardBottom {
+        padding: 12px 14px 14px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .go {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.92);
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+        transition: transform 0.15s ease, background 0.15s ease,
+          border-color 0.15s ease;
+        font-size: 13px;
+      }
+      .go:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+      .go:active {
+        transform: translateY(0);
+      }
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 52%;
+        text-align: right;
+      }
+
+      /* Empty state */
+      .empty {
+        border-radius: var(--radius);
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.04);
+        padding: 18px;
+        text-align: center;
+        color: var(--muted);
+      }
+      .empty b {
+        color: rgba(255, 255, 255, 0.88);
+      }
+
+      /* Bottom nav (mobile “app” vibe) */
+      .nav {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 10px;
+        bottom: calc(10px + var(--safe-bot));
+        width: min(var(--maxw), calc(100% - 22px));
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(10, 12, 20, 0.55);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 50;
+      }
+      .navBtn {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 10px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        color: rgba(255, 255, 255, 0.75);
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.15s ease, transform 0.15s ease,
+          color 0.15s ease, border-color 0.15s ease;
+        font-size: 11px;
+        text-align: center;
+        min-width: 0;
+      }
+      .navBtn:hover {
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateY(-1px);
+      }
+      .navBtn[data-active="true"] {
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.25),
+          rgba(34, 211, 238, 0.16)
+        );
+        border-color: rgba(34, 211, 238, 0.35);
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .navBtn svg {
+        opacity: 0.9;
+      }
+
+      /* Responsive */
+      @media (max-width: 980px) {
+        .heroGrid {
+          grid-template-columns: 1fr;
+        }
+        .filters {
+          grid-template-columns: 1fr 1fr;
+        }
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .hint {
+          max-width: 44%;
+        }
+      }
+      @media (max-width: 560px) {
+        .filters {
+          grid-template-columns: 1fr;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .hint {
+          display: none;
+        }
+        .topActions .pill span {
+          display: none;
+        }
+        .topActions .pill {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="fx"></div>
+
+    <div class="app">
+      <div class="wrap">
+        <!-- TOP BAR -->
+        <div class="top">
+          <div class="brand">
+            <div class="logo" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 2l2.6 6.2L21 11l-6.4 2.8L12 20l-2.6-6.2L3 11l6.4-2.8L12 2z"
+                  stroke="white"
+                  stroke-width="1.7"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div class="title">
+              <h1>Mis tiendas favoritas</h1>
+              <p>Secciones · precios · estilos · ⭐ favoritos (guardados)</p>
+            </div>
+          </div>
+
+          <div class="topActions">
+            <button
+              class="pill"
+              id="btnOpenFavs"
+              type="button"
+              title="Abrir todas tus favoritas"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M10 14l-2 2a4 4 0 005.7 5.6l2-2"
+                  stroke="white"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M14 10l2-2a4 4 0 00-5.7-5.6l-2 2"
+                  stroke="white"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M8 12h8"
+                  stroke="white"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span>Abrir ⭐</span>
+            </button>
+            <button
+              class="pill"
+              id="btnReset"
+              type="button"
+              title="Limpiar filtros"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 6h18"
+                  stroke="white"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M7 6l1 14h8l1-14"
+                  stroke="white"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10 10v6M14 10v6"
+                  stroke="white"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span>Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- HERO -->
+        <div class="hero">
+          <div class="heroGrid">
+            <div class="heroLeft">
+              <h2>Navega como si fuera tu “app” ✨</h2>
+              <p>
+                Filtra por <b>sección</b>, <b>precio</b> y <b>estilo</b>, busca
+                por nombre, marca ⭐ tus favoritas y abre todas con un click.
+                Todo se guarda en tu navegador (localStorage).
+              </p>
+
+              <div class="quickRow" id="chipsRow"></div>
+            </div>
+
+            <div class="statBox">
+              <div class="statTop">
+                <div class="badge">Tu armario en modo radar</div>
+                <div class="badge" id="badgeActive">● filtros</div>
+              </div>
+              <div class="statNum" id="statCount">0</div>
+              <div class="statHint" id="statHint">
+                marcas visibles (según tus filtros)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="filters">
+          <div class="field">
+            <div class="label">
+              <span>🔎 Buscar</span>
+            </div>
+            <input
+              class="control"
+              id="q"
+              placeholder="Ej: ‘Sezane’, ‘invitada’, ‘zapatos’..."
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="field">
+            <div class="label">🧩 Sección</div>
+            <select class="control" id="section"></select>
+          </div>
+
+          <div class="field">
+            <div class="label">💸 Precio</div>
+            <select class="control" id="price"></select>
+          </div>
+
+          <div class="field">
+            <div class="label">🎭 Estilo</div>
+            <select class="control" id="style"></select>
+          </div>
+        </div>
+
+        <!-- RESULTS HEADER -->
+        <div class="sectionHead">
+          <h3 id="resultsTitle">Resultados</h3>
+          <div class="meta">
+            <span id="metaFavs">⭐ 0 favoritas</span>
+            <span class="dot"></span>
+            <span id="metaLast">Listo</span>
+          </div>
+        </div>
+
+        <!-- GRID -->
+        <div class="grid" id="grid"></div>
+
+        <!-- EMPTY -->
+        <div class="empty" id="empty" style="display: none">
+          No hay resultados con esos filtros. <br />
+          Prueba a quitar <b>estilo</b> o <b>precio</b>, o escribe menos en la
+          búsqueda.
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="nav" role="navigation" aria-label="Navegación rápida">
+      <button class="navBtn" data-tab="all" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M4 7h16M4 12h16M4 17h16"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+        Todo
+      </button>
+      <button class="navBtn" data-tab="basicos" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M7 7h10M7 12h10M7 17h6"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+        Básicos
+      </button>
+      <button class="navBtn" data-tab="ropa" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M8 7l4-3 4 3M6 9l2-2h8l2 2v11H6V9z"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Ropa
+      </button>
+      <button class="navBtn" data-tab="invitada" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 3c2 2 3 4 3 6a3 3 0 11-6 0c0-2 1-4 3-6z"
+            stroke="white"
+            stroke-width="1.6"
+          />
+          <path
+            d="M7 21l2-9h6l2 9"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Invitada
+      </button>
+      <button class="navBtn" data-tab="zapatos" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M4 16c6 0 8-6 8-6s1 3 8 4v4H4v-2z"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Zapatos
+      </button>
+      <button class="navBtn" data-tab="joyeria" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 3l4 6-4 12-4-12 4-6z"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8 9h8"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+        Joyería
+      </button>
+      <button class="navBtn" data-tab="favs" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 17.3l-6.2 3.5 1.6-7L2 8.9l7.1-.6L12 2l2.9 6.3 7.1.6-5.4 4.9 1.6 7z"
+            stroke="white"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+        </svg>
+        ⭐
+      </button>
+    </div>
+
+    <script>
+      // ===== Data =====
+      // price: budget | mid | premium
+      // styleTags: fastfashion, minimal, preppy, boho, scandi, romantic, guest, shoes, jewelry, trendy, classic, artisan
+      const BRANDS = [
+        // BÁSICOS
+        {
+          name: "Uniqlo",
+          section: "Básicos",
+          price: "budget",
+          style: ["minimal", "classic", "basics"],
+          url: "https://www.uniqlo.com/es/en/",
+        },
+        {
+          name: "Zara",
+          section: "Básicos",
+          price: "budget",
+          style: ["trendy", "fastfashion"],
+          url: "https://www.zara.com/",
+        },
+
+        // ROPA
+        {
+          name: "Baoka",
+          section: "Ropa",
+          price: "mid",
+          style: ["trendy"],
+          url: "https://baoka.es/",
+        },
+        {
+          name: "Maje",
+          section: "Ropa",
+          price: "premium",
+          style: ["romantic", "classic"],
+          url: "https://eu.maje.com/",
+        },
+        {
+          name: "Gerard Darel",
+          section: "Ropa",
+          price: "premium",
+          style: ["classic"],
+          url: "https://gerarddarel.com/en-eu",
+        },
+        {
+          name: "Ralph Lauren",
+          section: "Ropa",
+          price: "premium",
+          style: ["preppy", "classic"],
+          url: "https://www.ralphlauren.es/en",
+        },
+        {
+          name: "Scalpers",
+          section: "Ropa",
+          price: "mid",
+          style: ["preppy", "trendy"],
+          url: "https://scalperscompany.com/",
+        },
+        {
+          name: "Massimo Dutti",
+          section: "Ropa",
+          price: "mid",
+          style: ["minimal", "classic"],
+          url: "https://www.massimodutti.com/es/en/",
+        },
+        {
+          name: "& Other Stories",
+          section: "Ropa",
+          price: "mid",
+          style: ["scandi", "romantic", "trendy"],
+          url: "https://www.stories.com/",
+        },
+        {
+          name: "Brownie",
+          section: "Ropa",
+          price: "mid",
+          style: ["trendy", "romantic"],
+          url: "https://www.browniespain.com/es/es/",
+        },
+        {
+          name: "Noon",
+          section: "Ropa",
+          price: "mid",
+          style: ["trendy", "y2k"],
+          url: "https://noonspain.com/en",
+        },
+        {
+          name: "renatta&go",
+          section: "Ropa",
+          price: "mid",
+          style: ["classic"],
+          url: "https://www.renattandgo.com/en",
+        },
+        {
+          name: "Apia",
+          section: "Ropa",
+          price: "mid",
+          style: ["boho", "classic"],
+          url: "https://www.apia.es/en",
+        },
+        {
+          name: "eseOese",
+          section: "Ropa",
+          price: "mid",
+          style: ["boho", "casual"],
+          url: "https://www.eseoese.com/en",
+        },
+        {
+          name: "Sézane",
+          section: "Ropa",
+          price: "mid",
+          style: ["romantic", "classic"],
+          url: "https://www.sezane.com/eu-es",
+        },
+
+        // VESTIDOS INVITADA
+        {
+          name: "Clouté",
+          section: "Vestidos Invitada",
+          price: "budget",
+          style: ["guest", "romantic"],
+          url: "https://cloute.es/",
+        },
+        {
+          name: "Scalpers",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "preppy"],
+          url: "https://scalperscompany.com/",
+        },
+        {
+          name: "Polín et Moi",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "romantic"],
+          url: "https://www.polinetmoi.com/es/",
+        },
+        {
+          name: "Sophie & Lucie",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "classic"],
+          url: "https://www.sophieandlucie.com/",
+        },
+        {
+          name: "MAKSU",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "classic"],
+          url: "https://shopmaksu.com/es-es",
+        },
+        {
+          name: "NA-KD",
+          section: "Vestidos Invitada",
+          price: "budget",
+          style: ["guest", "trendy"],
+          url: "https://www.na-kd.com/en",
+        },
+        {
+          name: "Cardié Moda",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "romantic"],
+          url: "https://cardiemoda.com/",
+        },
+        {
+          name: "Apparentia",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "classic"],
+          url: "https://www.apparentia.com/",
+        },
+        {
+          name: "Barey Collection",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "classic"],
+          url: "https://www.bareycollection.com/en/",
+        },
+        {
+          name: "Womance",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "romantic"],
+          url: "https://womance.com/",
+        },
+        {
+          name: "Bgo & Me",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "artisan"],
+          url: "https://bgoandme.com/en",
+        },
+        {
+          name: "Cherubina",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "classic"],
+          url: "https://cherubina.com/en",
+        },
+        {
+          name: "Style&Love",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "romantic"],
+          url: "https://www.styleandlove.es/",
+        },
+        {
+          name: "La Croixé",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "romantic"],
+          url: "https://www.lacroixe.com/",
+        },
+        {
+          name: "Miphai",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "romantic"],
+          url: "https://www.miphai.com/",
+        },
+        {
+          name: "Baymo",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "classic"],
+          url: "https://www.baymo.com/es",
+        },
+        {
+          name: "Samsøe Samsøe",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["scandi", "minimal"],
+          url: "https://www.samsoe.com/",
+        },
+        {
+          name: "Matelier Design",
+          section: "Vestidos Invitada",
+          price: "premium",
+          style: ["guest", "artisan"],
+          url: "https://matelierdesign.com/en",
+        },
+        {
+          name: "Inma Camacho",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "romantic"],
+          url: "https://inmacamacho.es/ropa-de-invitada/",
+        },
+        {
+          name: "Muscari",
+          section: "Vestidos Invitada",
+          price: "mid",
+          style: ["guest", "romantic"],
+          url: "https://muscaricollection.es/en",
+        },
+
+        // ZAPATOS
+        {
+          name: "Alpe",
+          section: "Zapatos",
+          price: "mid",
+          style: ["shoes", "classic"],
+          url: "https://alpestore.com/en",
+        },
+        {
+          name: "Maje",
+          section: "Zapatos",
+          price: "premium",
+          style: ["shoes", "classic"],
+          url: "https://eu.maje.com/",
+        },
+        {
+          name: "Martinelli",
+          section: "Zapatos",
+          price: "premium",
+          style: ["shoes", "classic"],
+          url: "https://www.martinelli.es/es-es/",
+        },
+        // En Tintoretto y Latouche, el canal más consistente es El Corte Inglés (marca exclusiva allí / catálogo).
+        {
+          name: "Tintoretto",
+          section: "Zapatos",
+          price: "mid",
+          style: ["shoes", "trendy"],
+          url: "https://www.elcorteingles.es/tintoretto/moda-mujer/zapatos/",
+        },
+        {
+          name: "Latouche",
+          section: "Zapatos",
+          price: "mid",
+          style: ["shoes", "trendy"],
+          url: "https://www.elcorteingles.es/latouche/moda-mujer/zapatos/",
+        },
+        {
+          name: "Parfois",
+          section: "Zapatos",
+          price: "budget",
+          style: ["shoes", "trendy"],
+          url: "https://www.parfois.com/en/es/home/",
+        },
+
+        // JOYERÍA
+        {
+          name: "Apodemia",
+          section: "Joyería",
+          price: "mid",
+          style: ["jewelry", "classic"],
+          url: "https://apodemia.com/en",
+        },
+      ];
+
+      // ===== Helpers =====
+      const $ = (sel, el = document) => el.querySelector(sel);
+      const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+
+      const PRICE_LABEL = {
+        any: "Cualquier precio",
+        budget: "Budget (€) · asequible",
+        mid: "Mid (€€) · medio",
+        premium: "Premium (€€€) · alto",
+      };
+
+      const STYLE_LABEL = {
+        any: "Cualquier estilo",
+        basics: "Básicos",
+        classic: "Clásico",
+        minimal: "Minimal",
+        romantic: "Romántico",
+        preppy: "Preppy",
+        boho: "Boho",
+        scandi: "Scandi",
+        trendy: "Trend",
+        guest: "Invitada",
+        shoes: "Zapatos",
+        jewelry: "Joyería",
+        fastfashion: "Fast fashion",
+        artisan: "Artesanal",
+        casual: "Casual",
+        y2k: "Y2K",
+      };
+
+      const SECTION_ORDER = [
+        "Básicos",
+        "Ropa",
+        "Vestidos Invitada",
+        "Zapatos",
+        "Joyería",
+      ];
+
+      const STORAGE_KEY = "favBrands_v1";
+
+      function loadFavs() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return new Set();
+          const arr = JSON.parse(raw);
+          return new Set(Array.isArray(arr) ? arr : []);
+        } catch {
+          return new Set();
+        }
+      }
+      function saveFavs(set) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(set)));
+      }
+
+      function hostname(u) {
+        try {
+          const url = new URL(u);
+          return url.hostname.replace("www.", "");
+        } catch {
+          return "";
+        }
+      }
+
+      // ===== State =====
+      const state = {
+        q: "",
+        section: "any",
+        price: "any",
+        style: "any",
+        quick: "all", // bottom nav
+        favs: loadFavs(),
+      };
+
+      // ===== UI Setup =====
+      const sectionSel = $("#section");
+      const priceSel = $("#price");
+      const styleSel = $("#style");
+      const qInput = $("#q");
+      const grid = $("#grid");
+      const empty = $("#empty");
+      const statCount = $("#statCount");
+      const metaFavs = $("#metaFavs");
+      const metaLast = $("#metaLast");
+      const badgeActive = $("#badgeActive");
+      const resultsTitle = $("#resultsTitle");
+
+      function unique(arr) {
+        return Array.from(new Set(arr));
+      }
+
+      function buildSelect(select, items, first) {
+        select.innerHTML = "";
+        const o0 = document.createElement("option");
+        o0.value = "any";
+        o0.textContent = first;
+        select.appendChild(o0);
+        for (const it of items) {
+          const o = document.createElement("option");
+          o.value = it;
+          o.textContent = it;
+          select.appendChild(o);
+        }
+      }
+
+      function buildSelectWithLabels(select, values, firstLabel, labelMap) {
+        select.innerHTML = "";
+        const o0 = document.createElement("option");
+        o0.value = "any";
+        o0.textContent = firstLabel;
+        select.appendChild(o0);
+        for (const v of values) {
+          const o = document.createElement("option");
+          o.value = v;
+          o.textContent = labelMap[v] ?? v;
+          select.appendChild(o);
+        }
+      }
+
+      function init() {
+        // Section options
+        buildSelect(sectionSel, SECTION_ORDER, "Cualquier sección");
+
+        // Price options
+        buildSelectWithLabels(
+          priceSel,
+          ["budget", "mid", "premium"],
+          "Cualquier precio",
+          PRICE_LABEL
+        );
+
+        // Style options (from STYLE_LABEL keys, excluding any)
+        const styles = Object.keys(STYLE_LABEL)
+          .filter((k) => k !== "any")
+          .sort((a, b) => STYLE_LABEL[a].localeCompare(STYLE_LABEL[b], "es"));
+        buildSelectWithLabels(
+          styleSel,
+          styles,
+          "Cualquier estilo",
+          STYLE_LABEL
+        );
+
+        // Chips (quick moods)
+        const chips = [
+          {
+            key: "sparkle",
+            label: "✨ Todo lo especial",
+            preset: { style: "guest" },
+          },
+          { key: "minimal", label: "🫧 Minimal", preset: { style: "minimal" } },
+          {
+            key: "romantic",
+            label: "🌸 Romántico",
+            preset: { style: "romantic" },
+          },
+          { key: "scandi", label: "🧊 Scandi", preset: { style: "scandi" } },
+          { key: "budget", label: "💚 Budget", preset: { price: "budget" } },
+          { key: "premium", label: "💎 Premium", preset: { price: "premium" } },
+        ];
+        const row = $("#chipsRow");
+        row.innerHTML = "";
+        chips.forEach((c) => {
+          const b = document.createElement("button");
+          b.className = "chip";
+          b.type = "button";
+          b.dataset.key = c.key;
+          b.dataset.active = "false";
+          b.textContent = c.label;
+          b.addEventListener("click", () => {
+            // toggle chip (single-select feel)
+            $$(".chip", row).forEach((x) => (x.dataset.active = "false"));
+            b.dataset.active = "true";
+            if (c.preset.style) {
+              state.style = c.preset.style;
+              styleSel.value = c.preset.style;
+            }
+            if (c.preset.price) {
+              state.price = c.preset.price;
+              priceSel.value = c.preset.price;
+            }
+            metaLast.textContent = "Chip aplicado";
+            render();
+          });
+          row.appendChild(b);
+        });
+
+        // Restore defaults
+        sectionSel.value = state.section;
+        priceSel.value = state.price;
+        styleSel.value = state.style;
+        qInput.value = state.q;
+
+        // Events
+        qInput.addEventListener("input", () => {
+          state.q = qInput.value.trim().toLowerCase();
+          metaLast.textContent = "Buscando…";
+          render();
+        });
+        sectionSel.addEventListener("change", () => {
+          state.section = sectionSel.value;
+          metaLast.textContent = "Filtrando…";
+          render();
+        });
+        priceSel.addEventListener("change", () => {
+          state.price = priceSel.value;
+          metaLast.textContent = "Filtrando…";
+          render();
+        });
+        styleSel.addEventListener("change", () => {
+          state.style = styleSel.value;
+          metaLast.textContent = "Filtrando…";
+          render();
+        });
+
+        $("#btnReset").addEventListener("click", () => resetAll());
+        $("#btnOpenFavs").addEventListener("click", () => openFavs());
+
+        // Bottom nav
+        const navBtns = $$(".navBtn");
+        navBtns.forEach((btn) =>
+          btn.addEventListener("click", () => {
+            navBtns.forEach((b) => (b.dataset.active = "false"));
+            btn.dataset.active = "true";
+            state.quick = btn.dataset.tab;
+            // Map quick tab to section/favs
+            if (state.quick === "all") {
+              state.section = "any";
+              sectionSel.value = "any";
+            } else if (state.quick === "basicos") {
+              state.section = "Básicos";
+              sectionSel.value = "Básicos";
+            } else if (state.quick === "ropa") {
+              state.section = "Ropa";
+              sectionSel.value = "Ropa";
+            } else if (state.quick === "invitada") {
+              state.section = "Vestidos Invitada";
+              sectionSel.value = "Vestidos Invitada";
+            } else if (state.quick === "zapatos") {
+              state.section = "Zapatos";
+              sectionSel.value = "Zapatos";
+            } else if (state.quick === "joyeria") {
+              state.section = "Joyería";
+              sectionSel.value = "Joyería";
+            }
+            metaLast.textContent = "Navegación rápida";
+            render();
+          })
+        );
+        // default active
+        const first = navBtns.find((b) => b.dataset.tab === "all");
+        if (first) first.dataset.active = "true";
+
+        render();
+      }
+
+      function resetAll() {
+        state.q = "";
+        qInput.value = "";
+        state.section = "any";
+        sectionSel.value = "any";
+        state.price = "any";
+        priceSel.value = "any";
+        state.style = "any";
+        styleSel.value = "any";
+        state.quick = "all";
+        $$(".navBtn").forEach(
+          (b) => (b.dataset.active = b.dataset.tab === "all" ? "true" : "false")
+        );
+        $$(".chip").forEach((c) => (c.dataset.active = "false"));
+        metaLast.textContent = "Reset listo";
+        render();
+      }
+
+      function openFavs() {
+        const favList = BRANDS.filter((b) => state.favs.has(keyOf(b)));
+        if (favList.length === 0) {
+          metaLast.textContent = "No tienes favoritas aún 😌";
+          return;
+        }
+        // Open with a small delay to avoid popup blockers more than possible
+        favList
+          .slice(0, 12)
+          .forEach((b, i) =>
+            setTimeout(() => window.open(b.url, "_blank", "noopener"), i * 90)
+          );
+        metaLast.textContent = `Abriendo ${Math.min(
+          12,
+          favList.length
+        )} favoritas…`;
+      }
+
+      function keyOf(b) {
+        // brand key should be stable per name+section
+        return `${b.name}__${b.section}`.toLowerCase();
+      }
+
+      // ===== Filtering + Rendering =====
+      function matches(b) {
+        const q = state.q;
+        const byQuery =
+          !q ||
+          b.name.toLowerCase().includes(q) ||
+          b.section.toLowerCase().includes(q) ||
+          b.style.some((s) =>
+            (STYLE_LABEL[s] ?? s).toLowerCase().includes(q)
+          ) ||
+          b.price.toLowerCase().includes(q);
+
+        const bySection =
+          state.section === "any" || b.section === state.section;
+        const byPrice = state.price === "any" || b.price === state.price;
+        const byStyle = state.style === "any" || b.style.includes(state.style);
+
+        const byFavs = state.quick !== "favs" || state.favs.has(keyOf(b));
+
+        return byQuery && bySection && byPrice && byStyle && byFavs;
+      }
+
+      function render() {
+        // update counts
+        const favCount = state.favs.size;
+        metaFavs.textContent = `⭐ ${favCount} favoritas`;
+
+        const activeFilters = [
+          state.q ? "q" : "",
+          state.section !== "any" ? "sec" : "",
+          state.price !== "any" ? "€" : "",
+          state.style !== "any" ? "style" : "",
+          state.quick === "favs" ? "⭐" : "",
+        ].filter(Boolean).length;
+
+        badgeActive.textContent = activeFilters
+          ? `● ${activeFilters} filtros`
+          : "● sin filtros";
+
+        // Title
+        const titleBits = [];
+        if (state.quick === "favs") titleBits.push("⭐ Favoritas");
+        if (state.section !== "any") titleBits.push(state.section);
+        if (state.price !== "any")
+          titleBits.push(PRICE_LABEL[state.price].split("·")[0].trim());
+        if (state.style !== "any")
+          titleBits.push(STYLE_LABEL[state.style] ?? state.style);
+        resultsTitle.textContent = titleBits.length
+          ? titleBits.join(" · ")
+          : "Resultados";
+
+        // filter data
+        let items = BRANDS.filter(matches);
+
+        // Sort: favorites first, then section order, then name
+        const secRank = new Map(SECTION_ORDER.map((s, i) => [s, i]));
+        items.sort((a, b) => {
+          const af = state.favs.has(keyOf(a)) ? 0 : 1;
+          const bf = state.favs.has(keyOf(b)) ? 0 : 1;
+          if (af !== bf) return af - bf;
+          const sa = secRank.get(a.section) ?? 99;
+          const sb = secRank.get(b.section) ?? 99;
+          if (sa !== sb) return sa - sb;
+          return a.name.localeCompare(b.name, "es");
+        });
+
+        // render
+        grid.innerHTML = "";
+        if (items.length === 0) {
+          empty.style.display = "block";
+        } else {
+          empty.style.display = "none";
+        }
+
+        statCount.textContent = String(items.length);
+        $("#statHint").textContent =
+          state.quick === "favs"
+            ? "favoritas visibles"
+            : "marcas visibles (según tus filtros)";
+
+        items.forEach((b) => grid.appendChild(card(b)));
+
+        metaLast.textContent = "Listo";
+      }
+
+      function card(b) {
+        const c = document.createElement("div");
+        c.className = "card";
+
+        const top = document.createElement("div");
+        top.className = "cardTop";
+
+        const nameBox = document.createElement("div");
+        nameBox.className = "cardName";
+
+        const strong = document.createElement("strong");
+        strong.textContent = b.name;
+
+        const tags = document.createElement("div");
+        tags.className = "tags";
+
+        const t1 = document.createElement("span");
+        t1.className = `tag price-${b.price}`;
+        t1.textContent = PRICE_LABEL[b.price].split("·")[0].trim();
+
+        const t2 = document.createElement("span");
+        t2.className = "tag";
+        t2.textContent = b.section;
+
+        tags.appendChild(t2);
+        tags.appendChild(t1);
+
+        // up to 2 style tags
+        const styleNice = b.style
+          .filter((s) => s !== "shoes" && s !== "jewelry")
+          .slice(0, 2)
+          .map((s) => STYLE_LABEL[s] ?? s);
+
+        styleNice.forEach((s) => {
+          const t = document.createElement("span");
+          t.className = "tag";
+          t.textContent = s;
+          tags.appendChild(t);
+        });
+
+        nameBox.appendChild(strong);
+        nameBox.appendChild(tags);
+
+        const star = document.createElement("div");
+        star.className = "star";
+        const k = keyOf(b);
+        star.dataset.on = state.favs.has(k) ? "true" : "false";
+        star.title = state.favs.has(k)
+          ? "Quitar de favoritas"
+          : "Añadir a favoritas";
+        star.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 17.3l-6.2 3.5 1.6-7L2 8.9l7.1-.6L12 2l2.9 6.3 7.1.6-5.4 4.9 1.6 7z"
+                stroke="white" stroke-width="1.6" stroke-linejoin="round"
+                fill="${
+                  state.favs.has(k) ? "rgba(251,191,36,.35)" : "transparent"
+                }"></path>
+        </svg>
+      `;
+        star.addEventListener("click", () => {
+          if (state.favs.has(k)) state.favs.delete(k);
+          else state.favs.add(k);
+          saveFavs(state.favs);
+          render();
+        });
+
+        top.appendChild(nameBox);
+        top.appendChild(star);
+
+        const bottom = document.createElement("div");
+        bottom.className = "cardBottom";
+
+        const a = document.createElement("a");
+        a.className = "go";
+        a.href = b.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.innerHTML = `
+        Ir a la tienda
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 17L17 7" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M10 7h7v7" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `;
+
+        const h = document.createElement("div");
+        h.className = "hint";
+        h.textContent = hostname(b.url);
+
+        bottom.appendChild(a);
+        bottom.appendChild(h);
+
+        c.appendChild(top);
+        c.appendChild(bottom);
+
+        return c;
+      }
+
+      // Init
+      init();
+    </script>
+  </body>
+</html>
